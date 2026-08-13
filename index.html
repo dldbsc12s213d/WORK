@@ -1,309 +1,344 @@
-def generate_work_log_code():
-    code_content = """# 업무 계획 및 일지 관리 시스템 (Work Log System)
-
-이 코드는 단일 HTML 파일로 구성되어 있으며, 복사해서 `index.html`로 저장한 뒤 깃허브 페이지(GitHub Pages) 등에 바로 호스팅하여 사용할 수 있습니다. HTML, CSS, JavaScript가 모두 포함되어 있습니다.
-
-```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>업무 계획 및 일지 관리</title>
+    <title>업무 계획 및 일지 관리 (Notion Style)</title>
     <style>
+        /* Notion 스타일 변수 및 기본 설정 */
         :root {
-            --primary: #4F46E5;
-            --primary-hover: #4338CA;
-            --success: #10B981;
-            --bg-color: #F3F4F6;
-            --border: #E5E7EB;
+            --text-main: #37352f;
+            --text-gray: #787774;
+            --bg-main: #ffffff;
+            --bg-hover: #efefef;
+            --border-color: #e9e9e7;
+            --primary: #2383e2;
         }
         body {
-            font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
-            background-color: var(--bg-color);
-            color: #1F2937;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            color: var(--text-main);
+            background-color: var(--bg-main);
+            line-height: 1.5;
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
         }
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        h1, h2, h3 { margin: 0 0 15px 0; }
-        .card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        textarea {
-            width: 100%;
-            height: 160px;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-        }
+        
+        /* 타이포그래피 */
+        h1 { font-size: 40px; font-weight: 700; margin-bottom: 30px; letter-spacing: -0.03em; }
+        h2 { font-size: 24px; font-weight: 600; margin-top: 40px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;}
+        
+        /* 버튼 스타일 */
         .btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s ease;
         }
-        .btn:hover { background-color: var(--primary-hover); }
-        .btn-success { background-color: var(--success); }
-        .btn-success:hover { background-color: #059669; }
-        
-        /* Task Board Styles */
-        .project-block {
-            border: 1px solid var(--border);
-            border-radius: 8px;
+        .btn:hover { background-color: #0066cc; }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { background-color: var(--bg-hover); }
+
+        /* 텍스트 입력창 */
+        textarea {
+            width: 100%;
+            height: 200px;
             padding: 16px;
-            margin-bottom: 16px;
-        }
-        .project-title { font-weight: bold; font-size: 1.1em; color: var(--primary); margin-bottom: 12px;}
-        .task-block {
-            background: #F9FAFB;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 12px;
-            margin-left: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            resize: vertical;
+            background-color: #fbfbfa;
+            box-sizing: border-box;
+            outline: none;
+        }
+        textarea:focus { border-color: rgba(35, 131, 226, 0.5); box-shadow: 0 0 0 2px rgba(35, 131, 226, 0.2); }
+
+        /* 노션 스타일 블록 (Task Board) */
+        .project-block { margin-top: 24px; }
+        .project-title { font-size: 18px; font-weight: 600; padding: 6px 0; color: var(--text-main); }
+        
+        .task-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            margin: 12px 0 12px 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
         .task-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
-            margin-bottom: 10px;
+            font-size: 16px;
+            margin-bottom: 12px;
         }
-        .progress-wrapper {
+        .progress-control {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 14px;
+            color: var(--text-gray);
         }
-        input[type="range"] { width: 100px; }
-        .subtask-list { margin-left: 20px; }
+        input[type="range"] { accent-color: var(--primary); cursor: pointer; }
+        
+        .subtask-list { margin-top: 12px; padding-left: 8px; }
         .subtask-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px dashed var(--border);
-            font-size: 14px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 15px;
         }
-        .subtask-item:last-child { border-bottom: none; }
+        .subtask-item:hover { background-color: var(--bg-hover); }
+        .subtask-item::before { content: "•"; color: var(--text-gray); margin-right: 8px; }
+        
         select {
             padding: 4px 8px;
             border-radius: 4px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-color);
+            background: white;
+            font-size: 13px;
+            color: var(--text-main);
+            cursor: pointer;
+            outline: none;
         }
-        
-        /* Modal */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); align-items: center; justify-content: center;
+        select:focus { border-color: var(--primary); }
+
+        /* 컨트롤 패널 영역 */
+        .action-panel {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 16px;
         }
-        .modal-content {
-            background: white; padding: 24px; border-radius: 12px;
-            width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto;
-        }
+
+        /* 결과창 영역 */
+        #resultSection { display: none; margin-top: 40px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1 id="todayTitle">오늘의 업무</h1>
-        <button class="btn" onclick="document.getElementById('historyModal').style.display='flex'">전일 기록 확인</button>
-    </div>
+    <h1 id="pageTitle">업무 계획 및 일지</h1>
 
-    <!-- 1. 텍스트 입력 영역 -->
-    <div class="card">
-        <h3>1. 업무 계획 입력</h3>
-        <textarea id="rawInput" placeholder="예:&#10;[경북대 IP명품 콘텐츠]&#10;1. IP명품 지식재산 배경지 제작&#10;- 검토후 obs 삽입&#10;&#10;[내부업무]&#10;1. 유튜브 자체 컨텐츠 제작 진행&#10;- 나레이션 작업&#10;- ai 영상 구현"></textarea>
-        <div style="text-align: right; margin-top: 10px;">
-            <button class="btn" onclick="parseText()">업무 구조화 하기 ➔</button>
+    <!-- 1. 입력 영역 -->
+    <div id="inputSection">
+        <p style="color: var(--text-gray); font-size: 15px; margin-bottom: 10px;">
+            텍스트 양식에 맞춰 오늘 할 일을 입력하세요. (예: [사업명] 엔터 / 1. 업무명 엔터 / - 세부작업)
+        </p>
+        <textarea id="rawInput" placeholder="[경북대 IP명품 콘텐츠]
+1. IP명품 지식재산 배경지 제작
+- 검토후 obs 삽입
+
+[내부업무]
+1. 유튜브 자체 컨텐츠 제작 진행
+- 나레이션 작업
+- ai 영상 구현
+- 제작 후 업로드 진행"></textarea>
+        
+        <div class="action-panel">
+            <button class="btn" onclick="transformToBlocks()">블록으로 변환하기 ➔</button>
         </div>
     </div>
 
-    <!-- 2. 작업 진행 보드 영역 -->
-    <div class="card" id="boardSection" style="display: none;">
-        <h3>2. 작업 진행 보드</h3>
-        <div id="boardContainer"></div>
-        <div style="text-align: right; margin-top: 20px;">
-            <button class="btn btn-success" onclick="generateReport()">오늘의 일지 쓰기 ➔</button>
+    <!-- 2. 변환된 보드 영역 (노션 스타일 블록) -->
+    <div id="boardSection" style="display: none;">
+        <div class="action-panel" style="justify-content: space-between; align-items: center; border-bottom: 1px solid #e9e9e7; padding-bottom: 10px;">
+            <span style="font-weight: 600; color: var(--text-gray);">✓ 업무 트래커</span>
+            <div>
+                <button class="btn btn-outline" onclick="editRawText()">기존 텍스트 수정</button>
+                <button class="btn" onclick="generateFinalLog()">오늘의 일지 쓰기 ➔</button>
+            </div>
         </div>
+        <div id="blockContainer"></div>
     </div>
 
-    <!-- 3. 결과 출력 및 익일 예정 업무 영역 -->
-    <div class="card" id="resultSection" style="display: none;">
-        <h3>3. 최종 일지 및 익일 예정 업무</h3>
-        <textarea id="finalOutput" style="height: 350px;"></textarea>
-    </div>
-</div>
-
-<!-- 전일 기록 모달 (달력/기록용 임시 UI) -->
-<div class="modal" id="historyModal">
-    <div class="modal-content">
-        <h2>전일 업무 기록</h2>
-        <p style="color: #666; font-size: 14px;">(여기에 이전 날짜의 기록을 불러오는 달력 및 데이터 연동 기능이 추가될 수 있습니다.)</p>
-        <textarea readonly style="height: 150px; margin-bottom:15px;">[어제업무]&#10;1. 이전 콘텐츠 기획 100%&#10;- 컷편집 완료</textarea>
-        <div style="text-align: right;">
-            <button class="btn" onclick="document.getElementById('historyModal').style.display='none'">닫기</button>
-        </div>
+    <!-- 3. 결과 및 익일 업무 작성 영역 -->
+    <div id="resultSection">
+        <h2>일지 출력 및 익일 예정 업무</h2>
+        <textarea id="finalOutput" style="height: 400px; font-family: monospace;"></textarea>
     </div>
 </div>
 
 <script>
-    // 날짜 포맷팅 함수 (예: 2026-08-13)
-    function formatDate(date) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
+    // 날짜 포맷팅 함수 (YYYY-MM-DD)
+    function getFormattedDate(offsetDays = 0) {
+        const d = new Date();
+        d.setDate(d.getDate() + offsetDays);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
     }
 
-    const todayStr = formatDate(new Date());
-    const tomorrowDate = new Date();
-    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-    const tomorrowStr = formatDate(tomorrowDate);
+    const todayStr = getFormattedDate(0);
+    const tomorrowStr = getFormattedDate(1);
+    
+    // 제목에 오늘 날짜 세팅
+    document.getElementById('pageTitle').innerText = `${todayStr} 업무 일지`;
 
-    document.getElementById('todayTitle').innerText = `${todayStr} 오늘의 업무`;
+    let parsedData = [];
 
-    // 파싱된 데이터를 담을 배열
-    let parsedProjects = [];
-
-    // 1. 텍스트 파싱 로직
-    function parseText() {
+    // 1. 텍스트를 인식하여 데이터로 변환 (파싱 로직 수정됨)
+    function transformToBlocks() {
         const text = document.getElementById('rawInput').value;
-        const lines = text.split('\\n');
+        // 정규식을 사용해 줄바꿈 문자를 완벽하게 분리
+        const lines = text.split(/\r?\n/);
         
-        parsedProjects = [];
-        let currentProject = null;
+        parsedData = [];
+        let currentProj = null;
         let currentTask = null;
 
-        lines.forEach(line => {
-            const tLine = line.trim();
-            if (!tLine) return;
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue; // 빈 줄 무시
 
-            if (tLine.startsWith('[') && tLine.endsWith(']')) {
-                currentProject = { name: tLine, tasks: [] };
-                parsedProjects.push(currentProject);
+            // [사업명] 인식
+            if (line.startsWith('[') && line.endsWith(']')) {
+                currentProj = { title: line, tasks: [] };
+                parsedData.push(currentProj);
             } 
-            else if (/^\\d+\\./.test(tLine)) {
-                currentTask = { title: tLine, progress: 0, subtasks: [] };
-                if (currentProject) currentProject.tasks.push(currentTask);
+            // 1. 업무명 인식
+            else if (/^\d+\./.test(line)) {
+                currentTask = { title: line, progress: 0, subtasks: [] };
+                if (currentProj) currentProj.tasks.push(currentTask);
             } 
-            else if (tLine.startsWith('-')) {
-                if (currentTask) currentTask.subtasks.push({ title: tLine, status: '진행 중' });
+            // - 세부 작업 인식
+            else if (line.startsWith('-')) {
+                if (currentTask) currentTask.subtasks.push({ title: line, status: '대기' });
             }
-        });
+        }
 
-        renderBoard();
+        if (parsedData.length === 0) {
+            alert("인식할 수 있는 데이터가 없습니다. 양식을 확인해주세요.");
+            return;
+        }
+
+        renderBlocks();
+        document.getElementById('inputSection').style.display = 'none';
         document.getElementById('boardSection').style.display = 'block';
+        document.getElementById('resultSection').style.display = 'none';
     }
 
-    // 2. 보드 렌더링 로직
-    function renderBoard() {
-        const container = document.getElementById('boardContainer');
+    // 2. 파싱된 데이터를 UI 블록으로 렌더링
+    function renderBlocks() {
+        const container = document.getElementById('blockContainer');
         container.innerHTML = '';
 
-        parsedProjects.forEach((proj, pIndex) => {
-            let projHtml = `<div class="project-block"><div class="project-title">${proj.name}</div>`;
+        parsedData.forEach((proj, pIdx) => {
+            let html = `<div class="project-block"><div class="project-title">${proj.title}</div>`;
             
-            proj.tasks.forEach((task, tIndex) => {
-                let subtasksHtml = task.subtasks.map((sub, sIndex) => `
+            proj.tasks.forEach((task, tIdx) => {
+                let subHtml = task.subtasks.map((sub, sIdx) => `
                     <div class="subtask-item">
-                        <span>${sub.title}</span>
-                        <select id="status_${pIndex}_${tIndex}_${sIndex}">
-                            <option value="대기">대기</option>
-                            <option value="진행 중" selected>진행 중</option>
+                        <span style="flex:1;">${sub.title}</span>
+                        <select id="status_${pIdx}_${tIdx}_${sIdx}" onchange="syncProgress(${pIdx}, ${tIdx})">
+                            <option value="대기" selected>대기</option>
+                            <option value="진행 중">진행 중</option>
                             <option value="완료">완료</option>
                         </select>
                     </div>
                 `).join('');
 
-                projHtml += `
-                    <div class="task-block">
+                html += `
+                    <div class="task-card">
                         <div class="task-header">
                             <span>${task.title}</span>
-                            <div class="progress-wrapper">
-                                <input type="range" id="prog_${pIndex}_${tIndex}" min="0" max="100" step="10" value="0" oninput="document.getElementById('progVal_${pIndex}_${tIndex}').innerText = this.value + '%'">
-                                <span id="progVal_${pIndex}_${tIndex}" style="width: 40px; text-align: right;">0%</span>
+                            <div class="progress-control">
+                                <input type="range" id="prog_${pIdx}_${tIdx}" min="0" max="100" step="10" value="0" 
+                                       oninput="document.getElementById('progText_${pIdx}_${tIdx}').innerText = this.value + '%'">
+                                <span id="progText_${pIdx}_${tIdx}" style="width: 40px; text-align: right; font-weight:bold; color: var(--primary);">0%</span>
                             </div>
                         </div>
                         <div class="subtask-list">
-                            ${subtasksHtml}
+                            ${subHtml}
                         </div>
                     </div>
                 `;
             });
-            projHtml += `</div>`;
-            container.innerHTML += projHtml;
+            html += `</div>`;
+            container.innerHTML += html;
         });
     }
 
-    // 3. 일지 및 익일 업무 생성 로직
-    function generateReport() {
-        let logText = "";
-        let tomorrowTasks = "\\n\\n[익일예정업무]\\n";
+    // 다시 입력창으로 돌아가는 함수
+    function editRawText() {
+        document.getElementById('boardSection').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById('inputSection').style.display = 'block';
+    }
 
-        parsedProjects.forEach((proj, pIndex) => {
-            let hasTasks = false;
-            let projLog = `${proj.name}\\n`;
+    // 하위 작업(완료) 갯수에 따라 슬라이더 자동 동기화 보조 함수 (선택적 기능)
+    function syncProgress(pIdx, tIdx) {
+        // 이 기능은 사용자가 수동으로 슬라이더를 조절할 수 있도록 냅둡니다.
+    }
+
+    // 3. 오늘의 일지 및 익일 업무 생성 로직
+    function generateFinalLog() {
+        let finalLog = "";
+        let tomorrowText = "\n[익일예정업무]\n";
+        let hasIncomplete = false;
+
+        parsedData.forEach((proj, pIdx) => {
+            let projHasData = false;
+            let tempLog = `${proj.title}\n`;
             
-            proj.tasks.forEach((task, tIndex) => {
-                hasTasks = true;
-                const progress = document.getElementById(`prog_${pIndex}_${tIndex}`).value;
+            proj.tasks.forEach((task, tIdx) => {
+                projHasData = true;
+                const progress = document.getElementById(`prog_${pIdx}_${tIdx}`).value;
                 
-                // 날짜 로직
+                // 날짜 로직: 100%면 마감 오늘, 아니면 내일
                 let dateStr = "";
-                if (progress == 100) {
+                if (progress === "100") {
                     dateStr = `시작 ${todayStr} / 마감 ${todayStr}`;
                 } else {
                     dateStr = `시작 ${todayStr} / 마감 (완료 예정) ${tomorrowStr}`;
-                    // 미완료 업무 익일 자동 이관
-                    tomorrowTasks += `${task.title}\\n`;
+                    // 미완료 업무 익일로 복사
+                    tomorrowText += `${task.title}\n`;
+                    hasIncomplete = true;
                 }
 
-                projLog += `${task.title} ${progress}%\\n${dateStr}\\n`;
+                tempLog += `${task.title} ${progress}%\n${dateStr}\n`;
 
-                task.subtasks.forEach((sub, sIndex) => {
-                    const status = document.getElementById(`status_${pIndex}_${tIndex}_${sIndex}`).value;
-                    projLog += `${sub.title} ${status}\\n`;
+                task.subtasks.forEach((sub, sIdx) => {
+                    const status = document.getElementById(`status_${pIdx}_${tIdx}_${sIdx}`).value;
+                    // '- 검토 완료' 형태로 합치기 (기존 - 기호 뒤에 상태 붙임)
+                    tempLog += `${sub.title} ${status}\n`;
                     
-                    if (progress < 100 && status !== '완료') {
-                        tomorrowTasks += `${sub.title}\\n`;
+                    // 세부 항목도 미완료면 익일로 복사
+                    if (progress !== "100" && status !== '완료') {
+                        tomorrowText += `${sub.title}\n`;
                     }
                 });
-                projLog += "\\n";
+                tempLog += "\n";
             });
 
-            if (hasTasks) logText += projLog;
+            if (projHasData) {
+                finalLog += tempLog;
+            }
         });
 
-        const finalOutputArea = document.getElementById('finalOutput');
-        finalOutputArea.value = logText.trim() + tomorrowTasks;
-        document.getElementById('resultSection').style.display = 'block';
+        // 익일 예정 업무에 커서를 두고 추가 작성할 수 있도록 텍스트 박스에 세팅
+        if(!hasIncomplete) {
+            tomorrowText += "- (내일 진행할 업무를 여기에 작성하세요)\n";
+        }
+
+        const outputBox = document.getElementById('finalOutput');
+        outputBox.value = finalLog.trim() + "\n" + tomorrowText;
         
-        // 스크롤 이동
-        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('resultSection').style.display = 'block';
+        outputBox.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 </body>
